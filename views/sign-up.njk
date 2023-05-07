@@ -1,5 +1,5 @@
-<section>
-    <form class="submit-form" action="/sign-up" method="POST">
+<section class="">
+    <form class="form one-col" action="/sign-up" method="POST">
         <label for="fullname">Enter your full name</label>
         <input name="fullname" type="text" placeholder="Full name"/>
         
@@ -16,5 +16,21 @@
             class="btn btn-cta purple"
             action="submit"
         >Submit</button>
-    </form>  
+    </form>
+    <div>
+        <b><p>Already a user?</b><br/>Sign in below</p>
+
+        <form name="signin" action="/sign-in" method="POST">
+            <label for="signInEmail">Enter your full name</label>
+            <input name="signInEmail" type="text" placeholder="enter your username/email"/>
+
+            <label for="signInPassword">Enter your full name</label>
+            <input name="signInPassword" type="text" placeholder="enter your password"/>
+            
+            <button 
+                class="btn btn-cta purple" 
+                action="submit"
+            >Submit</button>
+        </form>
+    </div>
 </section>  

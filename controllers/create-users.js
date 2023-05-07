@@ -16,6 +16,21 @@ const createCtrl = {
         if(!users) {
             return console.log('no users');
         }
+    },
+    signIn: async function(formData) {
+        const data = formData;
+    
+        const user = await User.findOne({ where: { 
+          email: data.email
+    }});
+        console.log(user)
+        return user
+    },
+    getSessionUser: async function(email) {
+        const signedInUser = await User.findOne({ where: {
+            email: email
+        }})
+        return signedInUser
     }
 }
 

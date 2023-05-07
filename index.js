@@ -1,31 +1,106 @@
+//–––––––––––––––––––––––––––––––––––––––––––
+//––––––––––ImportsImportsImports––––––––––––
+//–––––––––––––––––––––––––––––––––––––––––––
+
+
 require('dotenv').config()
-console.log(process.env);
 const express = require('express');
 const router = express.Router();
 const app = express();
 const port = 3000;
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
+// Sequelize is the name of our database.
 const sequelize = require('./db');
-
+const session = require('express-session');
+const sessionStore = require('express-session-sequelize')(session.Store);
+const cookieParser = require('cookie-parser')
 const viewsRouter = require('./routes/viewsRouter');
 
+
+//–––––––––––––––––––––––––––––––––––––––––––
+//––––––––This is for the front end––––––––––
+//–––––––––––––––––––––––––––––––––––––––––––
 // Configure the views engine for express app.
+
+
 nunjucks.configure('views', {
     autoescape:  true,
     express:  app
 })
 
+
+//–––––––––––––––––––––––––––––––––––––––––––
+//–––––––––––––––––––––––––––––––––––––––––––
+
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-if(process.env !== undefined || null) {
-    console.log(process.env)
-    sequelize.sync();
-    // Tell app to use a router
-    app.use('/', viewsRouter);
+
+//–––––––––––––––––––––––––––––––––––––––––––
+//–––––This is for db stuff and nerdness–––––
+//–––––––––––––––––––––––––––––––––––––––––––
+//––––––––––––––Session Storage––––––––––––––
+
+
+app.use(cookieParser());
+
+
+// Save our sessions in a new db table that is more cash money
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    store: new sessionStore({
+        db: sequelize,
+    }),
+    resave: false,
+    proxy: true,
+    saveUninitialized: true,
+    cookie: {
+        secure: process.env.HTTPS === 'true',
+        // This is nerd for like one day I think, idk ripped it from SO
+        expires: new Date(Date.now() + 48 * 60 * 60 * 1000)
+    }
+}));
+
+
+sequelize.sync()
+
+
+//–––––––––––––––––––––––––––––––––––––––––––
+//––––––––This is for express router–––––––––
+//–––––––––––––––––––––––––––––––––––––––––––
+
+// middleware for authenticating logged in users
+// Thank you to jonathan Holloway @
+// https://jonathan-holloway.medium.com/node-and-express-session-a23eb36a052
+// This is used in our routes to either return something legit
+// or bunk.
+
+
+const sessionChecker = (req, res) => {
+    if(req.session.user) {
+        return req.session.user;
+    } else {
+        return null;
+    }
 }
 
+
+module.exports = sessionChecker
+
+
+//–––––––––––––––––––––––––––––––––––––––––
+//–––––––––––––––––––––––––––––––––––––––––
+
+
+app.use('/', viewsRouter);
+
+
+//–––––––––––––––––––––––––––––––––––––––––––
+//––––––App is called @ port cashmoney–––––––
+//–––––––––––––––––––––––––––––––––––––––––––
 
 
 app.listen(port, () => {
