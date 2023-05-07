@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "tailwind:css": "npx tailwindcss -i ./public/css/main.css -o ./dist/output.css --watch",
+    "start": "nodemon index.js && npm run tailwind:css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
@@ -20,9 +23,12 @@
     "express-session-sequelize": "^2.3.0",
     "mysql2": "^3.2.4",
     "nunjucks": "^3.2.4",
+    "postcss-middleware": "^1.1.4",
     "sequelize": "^6.31.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
   }
 }

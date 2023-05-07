@@ -1,36 +1,40 @@
-<section class="">
-    <form class="form one-col" action="/sign-up" method="POST">
-        <label for="fullname">Enter your full name</label>
-        <input name="fullname" type="text" placeholder="Full name"/>
-        
-        <label for="username">Enter your email</label>
-        <input name="username" type="email" placeholder="Minimum of 8 characters"/>
+{% extends 'base-layout.njk' %}
 
-        <label for="password">Enter a password</label>
-        <input name="password" type="text" placeholder="password"/>
-        
-        <label for="YOE">How many years have you been sailing</label>
-        <input name="YOE" type="number" placeholder="Years of experience"/>
-
-        <button 
-            class="btn btn-cta purple"
-            action="submit"
-        >Submit</button>
-    </form>
-    <div>
-        <b><p>Already a user?</b><br/>Sign in below</p>
-
-        <form name="signin" action="/sign-in" method="POST">
-            <label for="signInEmail">Enter your full name</label>
-            <input name="signInEmail" type="text" placeholder="enter your username/email"/>
-
-            <label for="signInPassword">Enter your full name</label>
-            <input name="signInPassword" type="text" placeholder="enter your password"/>
+{% block content %}
+    <section class="">
+        <form class="form one-col" action="/sign-up" method="POST">
+            <label for="fullname">Enter your full name</label>
+            <input name="fullname" type="text" placeholder="Full name"/>
             
+            <label for="username">Enter your email</label>
+            <input name="username" type="email" placeholder="Minimum of 8 characters"/>
+
+            <label for="password">Enter a password</label>
+            <input name="password" type="text" placeholder="password"/>
+            
+            <label for="YOE">How many years have you been sailing</label>
+            <input name="YOE" type="number" placeholder="Years of experience"/>
+
             <button 
-                class="btn btn-cta purple" 
+                class="btn btn-cta purple"
                 action="submit"
             >Submit</button>
         </form>
-    </div>
-</section>  
+        <div>
+            <b><p>Already a user?</b><br/>Sign in below</p>
+
+            <form name="signin" action="/sign-in" method="POST">
+                <label for="signInEmail">Enter your full name</label>
+                <input name="signInEmail" type="text" placeholder="enter your username/email"/>
+
+                <label for="signInPassword">Enter your full name</label>
+                <input name="signInPassword" type="text" placeholder="enter your password"/>
+                
+                <button 
+                    class="btn btn-cta purple" 
+                    action="submit"
+                >Submit</button>
+            </form>
+        </div>
+    </section>  
+{% endblock %}

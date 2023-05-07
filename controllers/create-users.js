@@ -1,4 +1,5 @@
 const  User  = require('../models/user.schemas');
+const bcrypt = require("bcrypt");
 
 const createCtrl = {
     // Create a user if one does not exist already;
@@ -19,18 +20,53 @@ const createCtrl = {
     },
     signIn: async function(formData) {
         const data = formData;
-    
-        const user = await User.findOne({ where: { 
-          email: data.email
-    }});
-        console.log(user)
-        return user
+        // Auth block.
+        try {
+            const user = await User.findOne({ where: { 
+            email: data.email
+            }});
+            
+            if(!user) {
+                throw new Error("user not found");
+            }
+
+            const passwordMatch = bcrypt.compare(data.password, user.password)
+            
+            if(!passwordMatch) {
+                throw new Error("password incorrect");
+            }
+            // Auth worked
+            return user;
+
+        } catch(err) {
+            console.log(err)
+            throw err
+        }
     },
     getSessionUser: async function(email) {
         const signedInUser = await User.findOne({ where: {
             email: email
         }})
+
         return signedInUser
+    },
+    encryptPassword: async function(password) {
+        const response = await bcrypt.hash(password, 10)
+        .then(hash => (hash))
+        .catch(err => {
+            console.log(err)
+            res.send('Invalid password')
+        });
+        return response
+    },
+    unEncryptPassword: function(password, hash) {
+        bcrypt.compare(password, hash)
+        .then(result => {
+            return result
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 }
 

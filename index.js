@@ -7,6 +7,7 @@ require('dotenv').config()
 const express = require('express');
 const router = express.Router();
 const app = express();
+
 const port = 3000;
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
@@ -16,6 +17,9 @@ const session = require('express-session');
 const sessionStore = require('express-session-sequelize')(session.Store);
 const cookieParser = require('cookie-parser')
 const viewsRouter = require('./routes/viewsRouter');
+// For styles and stuff
+const path = require('path');
+const postcssMiddleware = require('postcss-middleware');
 
 
 //–––––––––––––––––––––––––––––––––––––––––––
@@ -24,11 +28,31 @@ const viewsRouter = require('./routes/viewsRouter');
 // Configure the views engine for express app.
 
 
-nunjucks.configure('views', {
+app.set('views', path.join(__dirname, 'views'));
+
+
+// Serve static files from the public directory
+
+app.use(express.static(path.join(__dirname, 'public')))
+
+// Compile css with Tailwind css and postcss
+
+app.use('/css/main.css', postcssMiddleware({
+    plugins: [],
+    src: (req) => path.join(__dirname, 'public', 'css', 'main.css'),
+    dest: (req) => path.join(__dirname, 'public', 'css', 'output.css'),
+    options: {
+      map: { inline: false },
+      parser: false
+    }
+  }));
+
+  // Set Nunjucks as the template engine
+
+  nunjucks.configure('./views', {
     autoescape:  true,
     express:  app
-})
-
+  })
 
 //–––––––––––––––––––––––––––––––––––––––––––
 //–––––––––––––––––––––––––––––––––––––––––––
@@ -67,6 +91,8 @@ app.use(session({
 
 sequelize.sync()
 
+// Not sure if I need this tbh.
+module.exports = session;
 
 //–––––––––––––––––––––––––––––––––––––––––––
 //––––––––This is for express router–––––––––
@@ -76,19 +102,7 @@ sequelize.sync()
 // Thank you to jonathan Holloway @
 // https://jonathan-holloway.medium.com/node-and-express-session-a23eb36a052
 // This is used in our routes to either return something legit
-// or bunk.
-
-
-const sessionChecker = (req, res) => {
-    if(req.session.user) {
-        return req.session.user;
-    } else {
-        return null;
-    }
-}
-
-
-module.exports = sessionChecker
+// or bunk. UPDATE TOOK IT OUT NOT USED.
 
 
 //–––––––––––––––––––––––––––––––––––––––––
@@ -101,6 +115,7 @@ app.use('/', viewsRouter);
 //–––––––––––––––––––––––––––––––––––––––––––
 //––––––App is called @ port cashmoney–––––––
 //–––––––––––––––––––––––––––––––––––––––––––
+
 
 
 app.listen(port, () => {

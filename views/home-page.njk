@@ -1,10 +1,30 @@
+{% extends 'base-layout.njk' %}
+
+{% block content %}
+<nav>
+    <ul>
+        <li>
+            <a href="/sign-up">Sign up</a>
+        </li>
+
+        {% if user %}
+
+        <li>
+            <p>
+                <b>{{ user.fullName }}</b>
+                    <br/>{{ user.YOE }}
+            </p>
+        </li>
+
+        <li>
+            <a href="/logout">Logout</a>
+        </li>
+        
+        {% endif %}
+    </ul>
+</nav>
 
 <main>
-    
-        <br><p class="text-body">{{ user }}</p></br>
-        <p class="text-body">{{ YOE }}</p>
-    
-
     <div class="wrapper-grid">
         <div class="col-start">
             <h1 class="text-heading">{{ mainContent }}</h1>
@@ -18,3 +38,4 @@
         </div>    
     </div>
 </main>
+{% endblock %}
