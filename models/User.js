@@ -7,6 +7,13 @@ const User = sequelize.define('User', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        // Might not need this but putting it in to be safe.
+        unique: true
+    },
+    UUID: {
+        type: DataTypes.UUIDV4,
+        allowNull: false,
+        unique: true,
     },
     fullName: {
         type: DataTypes.STRING,
@@ -23,10 +30,6 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    YOE: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    }
 });
 
 module.exports = User;

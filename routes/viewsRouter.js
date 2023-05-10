@@ -6,6 +6,7 @@ const sequelize = require('../db');
 const saltRounds = 10;
 const session = require('../index');
 const util = require("util");
+
 // Home page
 // 
 
@@ -26,7 +27,6 @@ router.get('/', async (req, res, next) => {
     res.render('home-page.njk', context)
 });
 
-
 // Sign up where we can create users
 // 
 
@@ -40,7 +40,6 @@ router.get('/sign-up', async (req, res, next) => {
 
     res.render('sign-up.njk', context)
 });
-
 
 // This is where we can create users.
 // 
@@ -56,8 +55,15 @@ router.post('/sign-up', async (req, res) => {
     // Check to make sure promise is fufilled before redirecting I think. 
     if(formData !== null && util.inspect(formData.password).includes("pending") === false) {
         createCtrl.createUser(formData);
+        // log in redirect to profile of user from home page. 
         res.status(201)
-        res.redirect('/')
+        
+        loggedInUser = await createCtrl.getSessionUser(req.session.user);
+        // Get user
+        if(loggedInUser) {
+            req.params.uuid = user.UUID;
+            res.redirect('/profile/:uuid')
+        }
     }
 });
 
@@ -72,18 +78,34 @@ router.post('/sign-in', async (req, res, next) => {
     }
     
    const user = await createCtrl.signIn(formData);
-
-   if(user) {
+   console.log(user)
+   if(user && user.UUID !== null) {
         console.log(user)
          // Save user pk to session in order to get from different views
          req.session.user = user.email
          req.session.valid = true;
-         res.redirect('/');   
+        
+         req.params.uuid = user.UUID;
+
+         const { uuid } = req.params;
+         
+         res.redirect(`/profile/${uuid}`);   
     } else {
         console.log('something broke');
         res.send('Invalid username or password');
     }
 });
+
+router.get('/profile/:uuid', async(req, res, next) => {
+    context = null;
+    const { uuid } = req.params;
+    user = await createCtrl.getQueryUser(uuid);
+    
+    if(user) {
+        console.log('this should be working', user.dataValues)
+        res.render('profile-page.njk', user.dataValues)
+    }
+})
 
 // Log out functionality.
 // 

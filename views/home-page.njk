@@ -1,41 +1,29 @@
 {% extends 'base-layout.njk' %}
 
 {% block content %}
-<nav>
-    <ul>
-        <li>
-            <a href="/sign-up">Sign up</a>
-        </li>
+<nav class="w-100 px-20 grid gap-x-4">
+    <a class="blue-500 hover:blue-400" href="/sign-up">Sign up</a>
 
-        {% if user %}
-
-        <li>
+    <a class="blue-500 hover:blue-400" href="/learn-more">Learn more</a>
+    {% if user %}
             <p>
                 <b>{{ user.fullName }}</b>
                     <br/>{{ user.YOE }}
             </p>
-        </li>
-
-        <li>
-            <a href="/logout">Logout</a>
-        </li>
-        
-        {% endif %}
-    </ul>
+        <a href="/logout">Logout</a>
+    {% endif %}
 </nav>
 
-<main>
-    <div class="wrapper-grid">
-        <div class="col-start">
-            <h1 class="text-heading">{{ mainContent }}</h1>
+<main class="w-100">
+        <div class="container grid place-content-center">
+            <h1 class="">Bookmarked/BookClub</h1>
 
-            <h3 class="text-subheading">{{ mainContentDescription }}</h3>
+            <h3 class="text-subheading">Subheading marketing pitch for this thing</h3>
 
             <a 
               class="btn btn-cta purple"
               href="{{ mainBtnHref }}"
             >{{ mainBtnCta }}</a>
         </div>    
-    </div>
 </main>
 {% endblock %}

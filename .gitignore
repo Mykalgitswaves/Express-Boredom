@@ -3,3 +3,4 @@
 env
 dotenv
 .dotenv
+config.json

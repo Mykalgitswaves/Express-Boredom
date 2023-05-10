@@ -1,34 +1,59 @@
 {% extends 'base-layout.njk' %}
 
 {% block content %}
-    <section class="">
-        <form class="form one-col" action="/sign-up" method="POST">
+    <section class="w-100 mx-auto py-11 section-margin">
+        <form class="container grid place-content-center" action="/sign-up" method="POST">
             <label for="fullname">Enter your full name</label>
-            <input name="fullname" type="text" placeholder="Full name"/>
+            <input class="border-solid border-2 border-sky-400"
+                name="fullname"
+                type="text"
+                placeholder="Full name"
+            />
             
             <label for="username">Enter your email</label>
-            <input name="username" type="email" placeholder="Minimum of 8 characters"/>
+            <input class="border-solid border-2 border-sky-400"
+                name="username"
+                type="email"
+                placeholder="Minimum of 8 characters"
+            />
 
             <label for="password">Enter a password</label>
-            <input name="password" type="text" placeholder="password"/>
+            <input class="border-solid border-2 border-sky-400"
+                name="password"
+                type="text"
+                placeholder="password"
+            />
             
             <label for="YOE">How many years have you been sailing</label>
-            <input name="YOE" type="number" placeholder="Years of experience"/>
+            <input class="border-solid border-2 border-sky-400" 
+                name="YOE"
+                type="number"
+                placeholder="Years of experience"
+            />
 
             <button 
                 class="btn btn-cta purple"
                 action="submit"
             >Submit</button>
         </form>
+
         <div>
             <b><p>Already a user?</b><br/>Sign in below</p>
 
             <form name="signin" action="/sign-in" method="POST">
                 <label for="signInEmail">Enter your full name</label>
-                <input name="signInEmail" type="text" placeholder="enter your username/email"/>
+                <input class="border-solid border-2 border-sky-400" 
+                    name="signInEmail" 
+                    type="text"
+                    placeholder="enter your username/email"
+                />
 
                 <label for="signInPassword">Enter your full name</label>
-                <input name="signInPassword" type="text" placeholder="enter your password"/>
+                <input class="border-solid border-2 border-sky-400" 
+                    name="signInPassword"
+                    type="text"
+                    placeholder="enter your password"
+                />
                 
                 <button 
                     class="btn btn-cta purple" 

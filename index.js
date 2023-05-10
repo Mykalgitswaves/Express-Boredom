@@ -47,7 +47,11 @@ app.use('/css/main.css', postcssMiddleware({
     }
   }));
 
-  // Set Nunjucks as the template engine
+
+// Set Nunjucks as the template engine
+// We should also consider which front end js 
+// we might want to use for this? Probably vue¿
+
 
   nunjucks.configure('./views', {
     autoescape:  true,

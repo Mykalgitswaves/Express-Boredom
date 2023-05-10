@@ -1,16 +1,26 @@
-const  User  = require('../models/user.schemas');
+const  User  = require('../models/User');
 const bcrypt = require("bcrypt");
+const crypto = require("crypto")
+
+
+// Replace all of this with O auth for better everything.
+// Should be easy to do. 
 
 const createCtrl = {
     // Create a user if one does not exist already;
     createUser: async function(formData) {
-        await User.sync()
+        if(formData) {
         User.create({
+            UUID: crypto.randomUUID(),
             fullName: formData.name,
             email: formData.username,
             password: formData.password,
             YOE: formData.YOE,
         });
+        console.log('user-created')
+        } else {
+            res.send('brokenbrokenbroken')
+        }
     },
     getAllUsers: async function() {
         const users = await User.findAll()
@@ -49,6 +59,12 @@ const createCtrl = {
         }})
 
         return signedInUser
+    },
+    getQueryUser: async function(uuid) {
+        const user = await User.findOne({ where: {
+            uuid: uuid
+        }})
+        return user;
     },
     encryptPassword: async function(password) {
         const response = await bcrypt.hash(password, 10)
